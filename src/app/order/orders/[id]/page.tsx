@@ -41,6 +41,7 @@ type Order = {
   total_paise: number;
   payment_method: string;
   created_at: string;
+  estimated_ready_at: string | null;
   items: OrderItem[];
   restaurant: { name: string; slug: string | null } | null;
 };
@@ -129,6 +130,7 @@ export default function OrderTrackerPage() {
         statusLabel={STATUS_LABELS[order.status] || order.status}
         statusTone={STATUS_TONE[order.status]}
         isTerminal={isTerminal}
+        estimatedReadyAt={order.status === "pending_payment" ? null : order.estimated_ready_at}
       />
       <p className="mb-space-5 font-sf-body text-[12.5px] text-sf-text-muted">
         Placed {formatOrderTime(order.created_at)}
