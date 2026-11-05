@@ -17,6 +17,7 @@ import { MenuSearchFilter, type Chip } from "@/components/storefront/menu/MenuSe
 import { MenuGrid } from "@/components/storefront/menu/MenuGrid";
 import { StickyCheckoutBar } from "@/components/storefront/menu/StickyCheckoutBar";
 import { ALL, BESTSELLERS, categoryIcon, type Branch, type MenuItem, type MenuResponse } from "@/components/storefront/menu/types";
+import { ReviewsSection } from "@/components/storefront/reviews/ReviewsSection";
 
 export default function RestaurantMenuPage() {
   const params = useParams<{ slug: string }>();
@@ -248,6 +249,8 @@ export default function RestaurantMenuPage() {
           ALL={ALL}
         />
       </div>
+
+      <ReviewsSection slug={slug} />
 
       {cart.slug === slug && <StickyCheckoutBar itemCount={itemCount} subtotalPaise={subtotalPaise} />}
 

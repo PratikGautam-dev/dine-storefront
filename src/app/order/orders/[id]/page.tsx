@@ -21,6 +21,7 @@ import { DeliveryPartnerCard } from "@/components/storefront/tracking/DeliveryPa
 import { OutletContactCard } from "@/components/storefront/tracking/OutletContactCard";
 import { TrackedOrderSummary } from "@/components/storefront/tracking/TrackedOrderSummary";
 import { TrackingActions } from "@/components/storefront/tracking/TrackingActions";
+import { ReviewFormModal } from "@/components/storefront/reviews/ReviewFormModal";
 
 type OrderItem = {
   menu_item_id: string;
@@ -57,6 +58,8 @@ export default function OrderTrackerPage() {
   const [error, setError] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
   async function load() {
     const result = await publicFetch<{ order: Order }>(`/api/public/orders/${orderId}`);
@@ -179,8 +182,26 @@ export default function OrderTrackerPage() {
               onConfirmCancel={cancelOrder}
               onDismissConfirm={() => setConfirmCancel(false)}
             />
+            {order.status === "completed" && !reviewSubmitted && (
+              <Button variant="secondary" onClick={() => setReviewOpen(true)}>
+                Rate your order
+              </Button>
+            )}
           </div>
         </div>
+      )}
+
+      {order.restaurant?.slug && (
+        <ReviewFormModal
+          open={reviewOpen}
+          slug={order.restaurant.slug}
+          restaurantName={order.restaurant.name}
+          onClose={() => setReviewOpen(false)}
+          onSubmitted={() => {
+            setReviewOpen(false);
+            setReviewSubmitted(true);
+          }}
+        />
       )}
     </div>
   );
