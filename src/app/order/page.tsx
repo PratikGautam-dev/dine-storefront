@@ -25,6 +25,7 @@ import { OffersStrip } from "@/components/storefront/home/OffersStrip";
 import { ChainsDirectory } from "@/components/storefront/home/ChainsDirectory";
 import { ClosestOutlets } from "@/components/storefront/home/ClosestOutlets";
 import { TopRatedDishes } from "@/components/storefront/home/TopRatedDishes";
+import { FilterBar, applySortAndFilters, type SortKey, type Filters } from "@/components/storefront/home/FilterBar";
 import { HowItWorks } from "@/components/storefront/home/HowItWorks";
 import { PartnerBanner } from "@/components/storefront/home/PartnerBanner";
 
@@ -86,7 +87,11 @@ function HomeContent() {
     return () => clearTimeout(timeout);
   }, [search, city]);
 
+  const [sort, setSort] = useState<SortKey>("rating");
+  const [filters, setFilters] = useState<Filters>({ vegOnly: false, openOnly: false });
+
   const outlets = restaurants ? flattenToOutlets(restaurants) : [];
+  const sortedOutlets = applySortAndFilters(outlets, sort, filters);
   const loading = restaurants === null && !error;
   const empty = restaurants !== null && restaurants.length === 0;
 
@@ -136,7 +141,10 @@ function HomeContent() {
       {!loading && !empty && (
         <>
           <ChainsDirectory outlets={outlets} sectionId={CHAINS_SECTION_ID} />
-          <ClosestOutlets outlets={outlets} sectionId={LISTINGS_SECTION_ID} />
+          <div className="mx-auto max-w-7xl w-full px-4 sm:px-8 pt-2">
+            <FilterBar sort={sort} onSortChange={setSort} filters={filters} onFiltersChange={setFilters} />
+          </div>
+          <ClosestOutlets outlets={sortedOutlets} sectionId={LISTINGS_SECTION_ID} />
           <TopRatedDishes outlets={outlets} sectionId={TOP_RATED_SECTION_ID} />
         </>
       )}

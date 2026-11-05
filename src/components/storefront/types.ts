@@ -22,6 +22,8 @@ export type RestaurantCard = {
   storefront_locked: boolean;
   branches: Branch[];
   rating: { average: number; count: number } | null;
+  has_veg: boolean;
+  has_non_veg: boolean;
 };
 
 /** One card per active branch (2+ branches) or exactly one card for the restaurant itself
@@ -48,6 +50,8 @@ export type Outlet = {
   avgPrepMinutes: number | null;
   minOrderPaise: number | null;
   rating: { average: number; count: number } | null;
+  hasVeg: boolean;
+  hasNonVeg: boolean;
 };
 
 /** Zomato-style ₹/₹₹/₹₹₹ price-tier badge, bucketed off min_order_paise (the only real
@@ -81,6 +85,8 @@ export function flattenToOutlets(restaurants: RestaurantCard[]): Outlet[] {
         avgPrepMinutes: r.avg_prep_minutes,
         minOrderPaise: r.min_order_paise,
         rating: r.rating,
+        hasVeg: r.has_veg,
+        hasNonVeg: r.has_non_veg,
       }];
     }
     return r.branches.map((b) => ({
@@ -100,6 +106,8 @@ export function flattenToOutlets(restaurants: RestaurantCard[]): Outlet[] {
       avgPrepMinutes: r.avg_prep_minutes,
       minOrderPaise: r.min_order_paise,
       rating: r.rating,
+      hasVeg: r.has_veg,
+      hasNonVeg: r.has_non_veg,
     }));
   });
 }
