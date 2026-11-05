@@ -17,7 +17,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { UtensilsCrossed } from "lucide-react";
 import { publicFetch } from "@/lib/customerAuth";
-import { flattenToOutlets, type RestaurantCard } from "@/components/storefront/types";
+import { flattenToOutlets, type RestaurantCard, type DishSearchResult } from "@/components/storefront/types";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { HeroSlider } from "@/components/storefront/home/HeroSlider";
 import { CategoryList } from "@/components/storefront/home/CategoryList";
@@ -26,6 +26,7 @@ import { ChainsDirectory } from "@/components/storefront/home/ChainsDirectory";
 import { ClosestOutlets } from "@/components/storefront/home/ClosestOutlets";
 import { TopRatedDishes } from "@/components/storefront/home/TopRatedDishes";
 import { FilterBar, applySortAndFilters, type SortKey, type Filters } from "@/components/storefront/home/FilterBar";
+import { DishSearchResults } from "@/components/storefront/home/DishSearchResults";
 import { HowItWorks } from "@/components/storefront/home/HowItWorks";
 import { PartnerBanner } from "@/components/storefront/home/PartnerBanner";
 
@@ -56,6 +57,7 @@ function HomeContent() {
   const [restaurants, setRestaurants] = useState<RestaurantCard[] | null>(null);
   const [cities, setCities] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [dishResults, setDishResults] = useState<DishSearchResult[]>([]);
 
   // Picks up search/city changes that happen via a real navigation (e.g. the shared Header's
   // search box or a category/restaurant link elsewhere pushing a new ?search=/?city=) without
@@ -82,6 +84,21 @@ function HomeContent() {
         setError(null);
       } else {
         setError(result.error);
+      }
+
+      // Dish-level search rides the same debounce as the restaurant search above -- one typing
+      // pause, both queries fire together, no second debounce timer. Only fires when there's
+      // actually something to search (the backend itself no-ops on an empty q, but skipping the
+      // request client-side avoids firing it on every page load).
+      if (search.trim()) {
+        const dishParams = new URLSearchParams({ q: search.trim() });
+        if (city) dishParams.set("city", city);
+        const dishResult = await publicFetch<{ results: DishSearchResult[] }>(
+          `/api/public/dishes?${dishParams.toString()}`,
+        );
+        setDishResults(dishResult.ok ? dishResult.data.results : []);
+      } else {
+        setDishResults([]);
       }
     }, 250);
     return () => clearTimeout(timeout);
@@ -148,6 +165,11 @@ function HomeContent() {
           <TopRatedDishes outlets={outlets} sectionId={TOP_RATED_SECTION_ID} />
         </>
       )}
+
+      {/* Rendered outside the !empty gate above -- a dish search can match even when no
+          restaurant's own name/cuisine/tagline matched the same text, so this must not
+          disappear just because the restaurant list came back empty. */}
+      {!loading && <DishSearchResults results={dishResults} />}
 
       <HowItWorks />
 

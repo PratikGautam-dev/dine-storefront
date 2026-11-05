@@ -65,6 +65,19 @@ export function priceTier(minOrderPaise: number | null): "₹" | "₹₹" | "₹
   return "₹₹₹";
 }
 
+/** GET /api/public/dishes?q=... -- one row per matching menu item, paired with the full
+ * restaurant card it belongs to (same shape list_public_restaurants() already builds). */
+export type DishSearchResult = {
+  item: {
+    id: string;
+    name: string;
+    price_paise: number;
+    image_url: string | null;
+    is_veg: boolean | null;
+  };
+  restaurant: RestaurantCard;
+};
+
 export function flattenToOutlets(restaurants: RestaurantCard[]): Outlet[] {
   return restaurants.flatMap((r): Outlet[] => {
     if (r.branches.length === 0) {
