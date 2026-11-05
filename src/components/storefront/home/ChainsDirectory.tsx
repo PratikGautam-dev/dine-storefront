@@ -8,7 +8,7 @@
 // -- the menu page's own branch picker handles which branch once the customer gets there.
 import { useState } from "react";
 import Link from "next/link";
-import type { Outlet } from "@/components/storefront/types";
+import { priceTier, type Outlet } from "@/components/storefront/types";
 
 type RestaurantSummary = {
   slug: string;
@@ -17,6 +17,7 @@ type RestaurantSummary = {
   logoUrl: string | null;
   coverImageUrl: string | null;
   isOpen: boolean;
+  minOrderPaise: number | null;
   rating: { average: number; count: number } | null;
   branchCount: number;
 };
@@ -37,6 +38,7 @@ function groupByRestaurant(outlets: Outlet[]): RestaurantSummary[] {
       logoUrl: outlet.logoUrl,
       coverImageUrl: outlet.coverImageUrl,
       isOpen: outlet.isOpen,
+      minOrderPaise: outlet.minOrderPaise,
       rating: outlet.rating,
       branchCount: 1,
     });
@@ -168,6 +170,9 @@ export function ChainsDirectory({ outlets, sectionId }: ChainsDirectoryProps) {
                     </h3>
                     <p className="font-sf-body text-xs text-sf-text-muted mt-1 leading-relaxed truncate">
                       {restaurant.cuisines.join(" • ") || "Multi-cuisine"}
+                      {priceTier(restaurant.minOrderPaise) && (
+                        <> &nbsp;·&nbsp; <span className="font-bold">{priceTier(restaurant.minOrderPaise)}</span></>
+                      )}
                     </p>
                   </div>
                 </div>

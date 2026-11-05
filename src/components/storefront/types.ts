@@ -46,8 +46,20 @@ export type Outlet = {
   coverImageUrl: string | null;
   isOpen: boolean;
   avgPrepMinutes: number | null;
+  minOrderPaise: number | null;
   rating: { average: number; count: number } | null;
 };
+
+/** Zomato-style ₹/₹₹/₹₹₹ price-tier badge, bucketed off min_order_paise (the only real
+ * price-ish signal on a restaurant card today -- there's no separate "average dish price"
+ * field). Thresholds are a starting point, not a measured distribution; null below ₹1 of min
+ * order (a restaurant with no minimum at all doesn't imply "cheap," it implies "unset"). */
+export function priceTier(minOrderPaise: number | null): "₹" | "₹₹" | "₹₹₹" | null {
+  if (minOrderPaise == null || minOrderPaise <= 0) return null;
+  if (minOrderPaise < 20000) return "₹";
+  if (minOrderPaise < 50000) return "₹₹";
+  return "₹₹₹";
+}
 
 export function flattenToOutlets(restaurants: RestaurantCard[]): Outlet[] {
   return restaurants.flatMap((r): Outlet[] => {
@@ -67,6 +79,7 @@ export function flattenToOutlets(restaurants: RestaurantCard[]): Outlet[] {
         coverImageUrl: r.cover_image_url,
         isOpen: r.is_open,
         avgPrepMinutes: r.avg_prep_minutes,
+        minOrderPaise: r.min_order_paise,
         rating: r.rating,
       }];
     }
@@ -85,6 +98,7 @@ export function flattenToOutlets(restaurants: RestaurantCard[]): Outlet[] {
       coverImageUrl: r.cover_image_url,
       isOpen: r.is_open,
       avgPrepMinutes: r.avg_prep_minutes,
+      minOrderPaise: r.min_order_paise,
       rating: r.rating,
     }));
   });

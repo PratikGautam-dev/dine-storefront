@@ -9,7 +9,7 @@
 // exact same card in its horizontal "top rated restaurants" rail.
 import Link from "next/link";
 import { cn } from "@/lib/cn";
-import type { Outlet } from "@/components/storefront/types";
+import { priceTier, type Outlet } from "@/components/storefront/types";
 
 export function OutletCard({ outlet, className }: { outlet: Outlet; className?: string }) {
   const href = outlet.branchId
@@ -88,14 +88,17 @@ export function OutletCard({ outlet, className }: { outlet: Outlet; className?: 
         )}
 
         <div className="mt-auto pt-3 flex items-center justify-between">
-          {outlet.avgPrepMinutes != null ? (
-            <span className="flex items-center gap-1 font-sf-body text-xs text-sf-text-muted">
-              <span className="material-symbols-outlined text-[16px] text-sf-primary">schedule</span>
-              ~{outlet.avgPrepMinutes} min
-            </span>
-          ) : (
-            <span />
-          )}
+          <span className="flex items-center gap-1.5 font-sf-body text-xs text-sf-text-muted">
+            {outlet.avgPrepMinutes != null && (
+              <span className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px] text-sf-primary">schedule</span>
+                ~{outlet.avgPrepMinutes} min
+              </span>
+            )}
+            {priceTier(outlet.minOrderPaise) && (
+              <span className="font-bold text-sf-text-body">{priceTier(outlet.minOrderPaise)}</span>
+            )}
+          </span>
           <span className="font-sf-body text-xs font-bold text-sf-primary">View menu →</span>
         </div>
       </div>
