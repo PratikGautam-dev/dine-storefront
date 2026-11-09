@@ -121,3 +121,36 @@ export async function publicFetch<T = unknown>(
     };
   }
 }
+
+/** Same as publicFetch, but for a multipart FormData body (e.g. a photo upload) -- the browser
+ * must set its own `multipart/form-data; boundary=...` Content-Type, so this can't just add a
+ * header the way publicFetch does. Shares the same 401-clears-session and network-error
+ * handling so an upload flow doesn't quietly skip the "log in again" behavior every other
+ * authenticated call gets. */
+export async function publicFetchForm<T = unknown>(
+  path: string,
+  formData: FormData,
+): Promise<FetchResult<T>> {
+  const token = getCustomerToken();
+  const headers: Record<string, string> = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    const res = await fetch(`${API_BASE_URL}${path}`, { method: "POST", headers, body: formData });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (res.status === 401) clearCustomerSession();
+      return {
+        ok: false,
+        status: res.status,
+        error: (data as { error?: string }).error || "Something went wrong.",
+      };
+    }
+    return { ok: true, data: data as T };
+  } catch {
+    return {
+      ok: false,
+      status: 0,
+      error: "Couldn't reach the server. Check your connection and try again.",
+    };
+  }
+}

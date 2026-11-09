@@ -8,7 +8,7 @@
 // plain yes/no shape.
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { API_BASE_URL, getCustomerToken, publicFetch } from "@/lib/customerAuth";
+import { publicFetch, publicFetchForm } from "@/lib/customerAuth";
 import { toast } from "@/lib/toast";
 
 const MAX_PHOTOS = 5;
@@ -41,26 +41,18 @@ export function ReviewFormModal({ open, slug, restaurantName, onClose, onSubmitt
     }
     setUploading(true);
     setError(null);
-    try {
-      const token = getCustomerToken();
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await fetch(`${API_BASE_URL}/api/public/restaurants/${slug}/reviews/upload-image`, {
-        method: "POST",
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-        body: formData,
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setError(data.error || "Couldn't upload that photo.");
-        return;
-      }
-      setPhotoUrls((prev) => [...prev, data.image_url as string]);
-    } catch {
-      setError("Couldn't reach the server. Check your connection and try again.");
-    } finally {
-      setUploading(false);
+    const formData = new FormData();
+    formData.append("file", file);
+    const result = await publicFetchForm<{ image_url: string }>(
+      `/api/public/restaurants/${slug}/reviews/upload-image`,
+      formData,
+    );
+    setUploading(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
     }
+    setPhotoUrls((prev) => [...prev, result.data.image_url]);
   }
 
   function removePhoto(url: string) {
