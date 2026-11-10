@@ -7,7 +7,7 @@
 export type Branch = { id: string; slug: string | null; name: string; address_line: string | null; city: string | null };
 
 export type RestaurantCard = {
-  hospital_id: number;
+  restaurant_id: number;
   name: string;
   slug: string;
   cuisines: string[];
@@ -36,7 +36,7 @@ export type RestaurantCard = {
 export type Outlet = {
   cardKey: string;
   slug: string;
-  hospitalId: number;
+  restaurantId: number;
   name: string;
   branchLabel: string | null;
   branchId: string | null;
@@ -84,7 +84,7 @@ export function flattenToOutlets(restaurants: RestaurantCard[]): Outlet[] {
       return [{
         cardKey: r.slug,
         slug: r.slug,
-        hospitalId: r.hospital_id,
+        restaurantId: r.restaurant_id,
         name: r.name,
         branchLabel: null,
         branchId: null,
@@ -105,7 +105,7 @@ export function flattenToOutlets(restaurants: RestaurantCard[]): Outlet[] {
     return r.branches.map((b) => ({
       cardKey: `${r.slug}:${b.id}`,
       slug: r.slug,
-      hospitalId: r.hospital_id,
+      restaurantId: r.restaurant_id,
       name: r.name,
       branchLabel: b.name,
       branchId: b.id,

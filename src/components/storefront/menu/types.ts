@@ -6,7 +6,7 @@
 export type Branch = { id: string; slug: string | null; name: string; address_line: string | null; city: string | null };
 
 export type Restaurant = {
-  hospital_id: number;
+  restaurant_id: number;
   name: string;
   slug: string;
   cuisines: string[];

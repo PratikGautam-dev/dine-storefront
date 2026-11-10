@@ -32,7 +32,7 @@ const EMPTY_LOYALTY: LoyaltyInfo = {
 };
 
 /** Account page's Membership tab -- real tier thresholds/benefit text and the customer's real
- * current tier/points (hospitals.loyalty_settings + patients.loyalty_tier/points), replacing the
+ * current tier/points (restaurants.loyalty_settings + patients.loyalty_tier/points), replacing the
  * hardcoded TIERS/MEMBERSHIP mock. */
 export function useAccountLoyalty(ready: boolean, slug?: string | null) {
   const [loyalty, setLoyalty] = useState<LoyaltyInfo>(EMPTY_LOYALTY);
