@@ -6,7 +6,7 @@ import { Header } from "./navbar/Header";
 import { CartDrawer } from "./cart/CartDrawer";
 
 /** Shared shell for every /order page -- renders the ported "Daap Dine" Header (fixed, h-20) and
- * the CartDrawer it opens. /order/<slug> (a restaurant's menu) draws its own hero/header via
+ * the CartDrawer it opens. /<slug> (a restaurant's menu) draws its own hero/header via
  * OutletHeroCanvas instead, same skip-the-shared-header convention this file already had before
  * the dine-client port. */
 export function StorefrontShell({ children }: { children: React.ReactNode }) {

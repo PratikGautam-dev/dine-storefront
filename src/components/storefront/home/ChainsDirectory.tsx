@@ -4,7 +4,7 @@
 // by a fake multi-brand "chain" concept with invented promo badges/ratings/distances. In
 // dine-connect every restaurant is independent, so this is repurposed to group the flattened
 // Outlet[] back by restaurant (since a multi-branch restaurant has one card per branch) and show
-// each restaurant once with its real branch count, linking to /order/{slug} with no branch param
+// each restaurant once with its real branch count, linking to /{slug} with no branch param
 // -- the menu page's own branch picker handles which branch once the customer gets there.
 import { useState } from "react";
 import Link from "next/link";

@@ -28,9 +28,9 @@ export type RestaurantCard = {
 
 /** One card per active branch (2+ branches) or exactly one card for the restaurant itself
  * (0/1 branches) -- the "restaurant×branch flattened" home-page model. `branchId: null` means
- * the card should route to /order/{slug} with no branch pre-selected (today's single-location
+ * the card should route to /{slug} with no branch pre-selected (today's single-location
  * behavior, unchanged); a non-null branchId pre-selects that branch via
- * /order/{slug}?branch=<branchSlug ?? branchId> -- branchSlug is preferred (a readable
+ * /{slug}?branch=<branchSlug ?? branchId> -- branchSlug is preferred (a readable
  * "bandra-west" instead of the opaque h3_2bfb1b5b id) and falls back to branchId only for a
  * branch that predates the slug column somehow still being NULL. */
 export type Outlet = {
