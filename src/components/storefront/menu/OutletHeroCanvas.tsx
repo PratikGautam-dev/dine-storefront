@@ -6,6 +6,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { rupees } from "@/lib/foodOrders";
+import { FavoriteHeartButton } from "@/components/storefront/FavoriteHeartButton";
 import type { Branch, MenuItem, Restaurant } from "./types";
 
 type Props = {
@@ -160,8 +161,12 @@ export function OutletHeroCanvas({
             </div>
           </div>
 
-          {/* Search toggle */}
+          {/* Favorite + search toggle */}
           <div className="flex shrink-0 items-center gap-2 self-start lg:self-center">
+            <FavoriteHeartButton
+              restaurantId={restaurant.restaurant_id}
+              className="border border-sf-border-divider shadow-none"
+            />
             <button
               type="button"
               onClick={onToggleSearch}

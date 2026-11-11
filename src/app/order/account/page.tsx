@@ -17,6 +17,7 @@ import { OrderHistory } from "@/components/storefront/account/OrderHistory";
 import { MembershipTab } from "@/components/storefront/account/MembershipTab";
 import { CreditsActivity } from "@/components/storefront/account/CreditsActivity";
 import { AddressesTab } from "@/components/storefront/account/AddressesTab";
+import { MostOrderedTab } from "@/components/storefront/account/MostOrderedTab";
 import { FavoritesTab } from "@/components/storefront/account/FavoritesTab";
 import { SettingsTab } from "@/components/storefront/account/SettingsTab";
 import { AccountSidebar } from "@/components/storefront/account/AccountSidebar";
@@ -25,6 +26,7 @@ import { getCustomerToken } from "@/lib/customerAuth";
 import { useCart } from "@/lib/cart";
 import { useAccountProfile } from "@/lib/useAccountProfile";
 import { useAccountFavorites, useAccountLoyalty, useAccountLoyaltyLedger } from "@/lib/useAccountLoyalty";
+import { useFavoriteRestaurants } from "@/lib/useFavorites";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -36,6 +38,7 @@ export default function AccountPage() {
   const { loyalty } = useAccountLoyalty(ready, cart.slug);
   const { transactions } = useAccountLoyaltyLedger(ready, cart.slug);
   const { dishes } = useAccountFavorites(ready);
+  const { restaurants: favoriteRestaurants } = useFavoriteRestaurants(ready);
 
   useEffect(() => {
     if (!getCustomerToken()) {
@@ -43,7 +46,7 @@ export default function AccountPage() {
       return;
     }
     const initial = new URLSearchParams(window.location.search).get("tab");
-    if (initial && ["orders", "membership", "ledger", "addresses", "favorites", "settings"].includes(initial)) {
+    if (initial && ["orders", "membership", "ledger", "addresses", "mostOrdered", "favorites", "settings"].includes(initial)) {
       setTab(initial as AccountTab);
     }
     setReady(true);
@@ -92,7 +95,8 @@ export default function AccountPage() {
               onDelete={deleteAddress}
             />
           )}
-          {tab === "favorites" && <FavoritesTab dishes={dishes} />}
+          {tab === "mostOrdered" && <MostOrderedTab dishes={dishes} />}
+          {tab === "favorites" && <FavoritesTab restaurants={favoriteRestaurants} />}
           {tab === "settings" && <SettingsTab profile={profile} saving={saving} onSave={saveProfile} />}
         </div>
 

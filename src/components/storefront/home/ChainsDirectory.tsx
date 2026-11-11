@@ -9,9 +9,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { priceTier, type Outlet } from "@/components/storefront/types";
+import { FavoriteHeartButton } from "@/components/storefront/FavoriteHeartButton";
 
 type RestaurantSummary = {
   slug: string;
+  restaurantId: number;
   name: string;
   cuisines: string[];
   logoUrl: string | null;
@@ -33,6 +35,7 @@ function groupByRestaurant(outlets: Outlet[]): RestaurantSummary[] {
     }
     bySlug.set(outlet.slug, {
       slug: outlet.slug,
+      restaurantId: outlet.restaurantId,
       name: outlet.name,
       cuisines: outlet.cuisines,
       logoUrl: outlet.logoUrl,
@@ -146,6 +149,8 @@ export function ChainsDirectory({ outlets, sectionId }: ChainsDirectoryProps) {
                         <span className="material-symbols-outlined text-[36px]">storefront</span>
                       </div>
                     )}
+
+                    <FavoriteHeartButton restaurantId={restaurant.restaurantId} className="absolute top-2.5 left-2.5" size="sm" />
 
                     <div className="absolute top-2.5 right-2.5 rounded-lg bg-sf-primary text-sf-on-primary px-2.5 py-1 font-sf-body text-xs font-bold shadow-md flex items-center gap-1">
                       <span className="material-symbols-outlined text-[14px]">storefront</span>

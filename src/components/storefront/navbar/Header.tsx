@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { clearCustomerSession, publicFetch, useCustomerSession } from "@/lib/customerAuth";
+import { resetFavoritesCache } from "@/lib/useFavorites";
 import { useCart } from "@/lib/cart";
 import { OutletNoticeBar } from "./OutletNoticeBar";
 
@@ -42,6 +43,7 @@ export function Header({ onOpenCart }: Props) {
 
   function handleLogout() {
     clearCustomerSession();
+    resetFavoritesCache();
     router.push("/");
   }
 

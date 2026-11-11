@@ -24,6 +24,11 @@ export type RestaurantCard = {
   rating: { average: number; count: number } | null;
   has_veg: boolean;
   has_non_veg: boolean;
+  // Real favorites/wishlist (migration 0087) -- null when there's no authenticated customer in
+  // play (anonymous browsing is allowed), otherwise a real "has this phone saved this restaurant"
+  // bool. Components prefer the live useFavoriteIds() cache over this once it's loaded; this is
+  // only the first-paint value before that cache fills in.
+  is_favorited: boolean | null;
 };
 
 /** One card per active branch (2+ branches) or exactly one card for the restaurant itself

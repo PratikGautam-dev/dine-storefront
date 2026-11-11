@@ -68,8 +68,11 @@ export function useAccountLoyaltyLedger(ready: boolean, slug?: string | null) {
   return { transactions };
 }
 
-/** Account page's Favourites tab -- derived from this phone's real order history across every
- * restaurant, not a stored concept. */
+/** Account page's Most Ordered tab (MostOrderedTab.tsx) -- derived from this phone's real order
+ * history across every restaurant, not a stored concept. Distinct from the REAL "save this
+ * restaurant" wishlist in src/lib/useFavorites.ts (FavoritesTab.tsx, GET /api/public/favorites) --
+ * kept under its original name here since every existing call site already imports it this way;
+ * only the data it feeds (MostOrderedTab, not FavoritesTab) changed meaning. */
 export function useAccountFavorites(ready: boolean) {
   const [dishes, setDishes] = useState<FavoriteDish[] | null>(null);
 

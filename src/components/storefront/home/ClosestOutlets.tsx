@@ -10,6 +10,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { priceTier, type Outlet } from "@/components/storefront/types";
+import { FavoriteHeartButton } from "@/components/storefront/FavoriteHeartButton";
 
 export function OutletCard({ outlet, className }: { outlet: Outlet; className?: string }) {
   const href = outlet.branchId
@@ -47,6 +48,8 @@ export function OutletCard({ outlet, className }: { outlet: Outlet; className?: 
             </span>
           )}
         </div>
+
+        <FavoriteHeartButton restaurantId={outlet.restaurantId} className="absolute top-2.5 right-2.5" size="sm" />
 
         <div className="absolute bottom-2.5 right-2.5 rounded-lg bg-sf-surface text-sf-on-surface px-2.5 py-1 font-sf-body text-xs font-extrabold shadow-md flex items-center gap-1">
           {outlet.rating ? (

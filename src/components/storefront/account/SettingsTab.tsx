@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { clearCustomerSession } from "@/lib/customerAuth";
+import { resetFavoritesCache } from "@/lib/useFavorites";
 import { Card } from "./Card";
 import type { RealProfile } from "@/lib/useAccountProfile";
 
@@ -30,6 +31,7 @@ export function SettingsTab({ profile, saving, onSave }: SettingsTabProps) {
 
   function handleLogout() {
     clearCustomerSession();
+    resetFavoritesCache();
     router.push("/");
   }
 
