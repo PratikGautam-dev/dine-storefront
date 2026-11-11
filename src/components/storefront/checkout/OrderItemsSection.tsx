@@ -64,7 +64,7 @@ export function OrderItemsSection({ slug, items, onQuantityChange }: Props) {
         ))}
       </div>
       <Link
-        href={`/order/${slug}`}
+        href={`/${slug}`}
         className="mt-3 inline-flex items-center gap-1 font-sf-body text-sm font-bold text-sf-primary hover:underline"
       >
         <Plus size={14} /> Add more items

@@ -13,8 +13,8 @@ import { priceTier, type Outlet } from "@/components/storefront/types";
 
 export function OutletCard({ outlet, className }: { outlet: Outlet; className?: string }) {
   const href = outlet.branchId
-    ? `/order/${outlet.slug}?branch=${outlet.branchSlug ?? outlet.branchId}`
-    : `/order/${outlet.slug}`;
+    ? `/${outlet.slug}?branch=${outlet.branchSlug ?? outlet.branchId}`
+    : `/${outlet.slug}`;
   const image = outlet.coverImageUrl || outlet.logoUrl;
   const addressParts = [outlet.addressLine, outlet.city].filter(Boolean);
 

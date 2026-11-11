@@ -67,7 +67,7 @@ export function PreorderSection({ includePreorder, setIncludePreorder, outlet }:
 
       <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
         <Link
-          href={`/order/${outlet.id}`}
+          href={`/${outlet.id}`}
           className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-sf-surface-container-low hover:bg-sf-surface-container text-sf-primary font-sf-body text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors"
         >
           <span className="material-symbols-outlined text-[18px]">add_circle</span>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toast";
+import { StorefrontProviders } from "@/components/storefront/StorefrontProviders";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        {children}
+        <StorefrontProviders>{children}</StorefrontProviders>
         <Toaster />
       </body>
     </html>

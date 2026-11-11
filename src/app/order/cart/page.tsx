@@ -118,7 +118,7 @@ export default function CartPage() {
         <p className="font-sf-headline text-[16px] font-extrabold text-sf-on-surface">Your cart is empty</p>
         <p className="font-sf-body text-[13px] text-sf-text-muted">Add something delicious and it will show up here.</p>
         <Link
-          href={cart.slug ? `/order/${cart.slug}` : "/order"}
+          href={cart.slug ? `/${cart.slug}` : "/order"}
           className="mt-2 inline-flex items-center gap-2 rounded-xl bg-sf-primary px-5 py-3 font-sf-body text-[14px] font-bold text-sf-on-primary hover:bg-sf-secondary"
         >
           {cart.slug ? "Back to menu" : "Browse restaurants"}
@@ -132,7 +132,7 @@ export default function CartPage() {
     <div className="mx-auto max-w-[640px] px-4 pt-4 pb-[150px]">
       <div className="mb-5 flex items-center gap-3">
         <Link
-          href={`/order/${cart.slug}`}
+          href={`/${cart.slug}`}
           aria-label="Back to menu"
           className="flex h-10 w-10 items-center justify-center rounded-full text-sf-on-surface hover:bg-black/5"
         >

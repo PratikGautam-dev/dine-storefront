@@ -129,7 +129,7 @@ export function ChainsDirectory({ outlets, sectionId }: ChainsDirectoryProps) {
             return (
               <Link
                 key={restaurant.slug}
-                href={`/order/${restaurant.slug}`}
+                href={`/${restaurant.slug}`}
                 className="group relative rounded-2xl bg-sf-surface border border-sf-border-divider/70 p-3 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between hover:border-sf-primary/40"
               >
                 <div>

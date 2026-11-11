@@ -30,14 +30,14 @@ export function BookingHero({ outlet }: BookingHeroProps) {
       label: 'Delivery',
       detail: `(${outlet.eta})`,
       icon: 'moped',
-      href: `/order/${outlet.id}`,
+      href: `/${outlet.id}`,
       active: false,
     },
     {
       label: 'Pickup / Takeaway',
       detail: '',
       icon: 'takeout_dining',
-      href: `/order/${outlet.id}`,
+      href: `/${outlet.id}`,
       active: false,
     },
     {

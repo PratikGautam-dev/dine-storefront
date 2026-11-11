@@ -24,7 +24,7 @@ export function DishSearchResults({ results }: Props) {
           {results.map(({ item, restaurant }) => (
             <Link
               key={item.id}
-              href={`/order/${restaurant.slug}`}
+              href={`/${restaurant.slug}`}
               className="flex items-center gap-3 rounded-xl bg-sf-surface border border-sf-border-divider/70 p-3 shadow-sm hover:shadow-md transition-all"
             >
               <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-sf-surface-container-low">

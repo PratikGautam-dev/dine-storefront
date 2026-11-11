@@ -32,7 +32,7 @@ export function DineInUnavailable({ outlet }: DineInUnavailableProps) {
           Change Outlet
         </Link>
         <Link
-          href={`/order/${outlet.id}`}
+          href={`/${outlet.id}`}
           className="h-11 px-6 rounded-xl bg-sf-surface-container-low hover:bg-sf-surface-container-high text-sf-on-surface font-sf-body text-sm font-bold flex items-center justify-center transition-colors"
         >
           Order from {outlet.branch}
