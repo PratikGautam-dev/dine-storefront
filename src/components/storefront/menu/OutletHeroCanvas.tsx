@@ -63,7 +63,7 @@ export function OutletHeroCanvas({
       <div className="relative mx-auto max-w-7xl px-4 pt-4 sm:px-8">
         {/* Breadcrumb */}
         <nav className="mb-3 flex items-center gap-1.5 font-sf-body text-xs text-sf-text-muted">
-          <Link href="/order" className="hover:text-sf-primary transition-colors">
+          <Link href="/" className="hover:text-sf-primary transition-colors">
             Restaurants
           </Link>
           <span className="material-symbols-outlined text-[14px]">chevron_right</span>

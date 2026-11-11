@@ -37,19 +37,19 @@ export function Header({ onOpenCart }: Props) {
 
   function goHomeWith(params: Record<string, string>) {
     const qs = new URLSearchParams(params);
-    router.push(qs.toString() ? `/order?${qs.toString()}` : "/order");
+    router.push(qs.toString() ? `/?${qs.toString()}` : "/");
   }
 
   function handleLogout() {
     clearCustomerSession();
-    router.push("/order");
+    router.push("/");
   }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-sf-surface/95 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-sf-border-divider/50">
       <div className="h-20 max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between gap-4">
         <div className="flex items-center gap-4 shrink-0">
-          <Link className="flex items-center gap-2 group cursor-pointer" href="/order">
+          <Link className="flex items-center gap-2 group cursor-pointer" href="/">
             <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-sf-primary text-sf-on-primary shadow-sm transition-transform group-hover:scale-105">
               <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                 <path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z" />

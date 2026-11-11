@@ -55,7 +55,7 @@ export function BookingHero({ outlet }: BookingHeroProps) {
         {/* Breadcrumb & badges */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-2">
           <nav className="flex items-center gap-1 font-sf-body text-xs text-sf-text-muted">
-            <Link href="/order" className="hover:text-sf-primary transition-colors">
+            <Link href="/" className="hover:text-sf-primary transition-colors">
               Home
             </Link>
             <span className="material-symbols-outlined text-[14px]">chevron_right</span>

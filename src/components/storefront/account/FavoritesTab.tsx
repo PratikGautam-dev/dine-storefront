@@ -29,7 +29,7 @@ export function FavoritesTab({ dishes }: { dishes: FavoriteDish[] | null }) {
         <h3 className="font-sf-headline text-lg font-bold mt-2">No favourites yet</h3>
         <p className="font-sf-body text-sm text-sf-text-muted mt-1">The dishes you order most will show up here.</p>
         <Link
-          href="/order"
+          href="/"
           className="inline-flex mt-4 h-10 px-5 rounded-xl bg-sf-primary hover:bg-sf-secondary text-sf-on-primary font-sf-body text-sm font-bold items-center transition-colors"
         >
           Browse restaurants

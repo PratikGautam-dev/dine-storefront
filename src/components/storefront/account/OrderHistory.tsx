@@ -69,7 +69,7 @@ export function OrderHistory() {
         <h3 className="mt-2 font-sf-headline text-lg font-bold text-sf-on-surface">No orders yet</h3>
         <p className="mt-1 font-sf-body text-sm text-sf-text-muted">Your order history will show up here.</p>
         <Link
-          href="/order"
+          href="/"
           className="mt-4 inline-flex h-10 items-center rounded-xl bg-sf-primary px-5 font-sf-body text-sm font-bold text-sf-on-primary transition-colors hover:bg-sf-secondary"
         >
           Browse restaurants

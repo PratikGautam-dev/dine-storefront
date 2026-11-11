@@ -30,7 +30,7 @@ export function SettingsTab({ profile, saving, onSave }: SettingsTabProps) {
 
   function handleLogout() {
     clearCustomerSession();
-    router.push("/order");
+    router.push("/");
   }
 
   return (

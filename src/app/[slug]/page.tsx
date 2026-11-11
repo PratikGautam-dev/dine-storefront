@@ -115,7 +115,7 @@ export default function RestaurantMenuPage() {
       <div className="mx-auto max-w-[900px] px-4 py-16 text-center">
         <span className="material-symbols-outlined mx-auto mb-3 block text-[32px] text-sf-text-muted">restaurant</span>
         <p className="font-sf-body text-[14px] font-semibold text-sf-on-surface">{error}</p>
-        <Link href="/order" className="mt-3 inline-block font-sf-body text-[13px] font-semibold text-sf-primary hover:underline">
+        <Link href="/" className="mt-3 inline-block font-sf-body text-[13px] font-semibold text-sf-primary hover:underline">
           Browse restaurants
         </Link>
       </div>

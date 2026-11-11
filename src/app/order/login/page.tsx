@@ -14,7 +14,7 @@ import { publicFetch, saveCustomerSession } from "@/lib/customerAuth";
 // break once (the portal's role-filter deep link) and fixed it the same way.
 export default function CustomerLoginPage() {
   const router = useRouter();
-  const [next, setNext] = useState("/order");
+  const [next, setNext] = useState("/");
   const [step, setStep] = useState<"phone" | "code">("phone");
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");

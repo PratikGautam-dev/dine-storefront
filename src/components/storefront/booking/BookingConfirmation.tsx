@@ -63,14 +63,14 @@ export function BookingConfirmation({ booking }: { booking: ConfirmedBooking }) 
 
       <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <Link
-          href="/order"
+          href="/"
           className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-sf-primary px-6 font-sf-body text-sm font-bold text-sf-on-primary shadow-md transition-colors hover:bg-sf-secondary sm:w-auto"
         >
           <span className="material-symbols-outlined text-[18px]">restaurant_menu</span>
           Browse restaurants
         </Link>
         <Link
-          href="/order"
+          href="/"
           className="flex h-11 w-full items-center justify-center rounded-xl bg-sf-surface-container-low px-6 font-sf-body text-sm font-bold text-sf-on-surface transition-colors hover:bg-sf-surface-container-high sm:w-auto"
         >
           Back to home

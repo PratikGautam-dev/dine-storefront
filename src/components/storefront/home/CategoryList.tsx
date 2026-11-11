@@ -56,7 +56,7 @@ export function CategoryList({ outlets, listingsSectionId }: CategoryListProps) 
     .map(([name]) => name);
 
   const handleCategoryClick = (cuisine: string) => {
-    router.push(`/order?search=${encodeURIComponent(cuisine)}`);
+    router.push(`/?search=${encodeURIComponent(cuisine)}`);
     document.getElementById(listingsSectionId)?.scrollIntoView({ behavior: "smooth" });
   };
 

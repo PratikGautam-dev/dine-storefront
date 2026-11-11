@@ -26,7 +26,7 @@ export function DineInUnavailable({ outlet }: DineInUnavailableProps) {
       </p>
       <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
         <Link
-          href="/order"
+          href="/"
           className="h-11 px-6 rounded-xl bg-sf-primary hover:bg-sf-secondary text-sf-on-primary font-sf-body text-sm font-bold shadow-md transition-colors flex items-center justify-center"
         >
           Change Outlet

@@ -118,7 +118,7 @@ export default function CartPage() {
         <p className="font-sf-headline text-[16px] font-extrabold text-sf-on-surface">Your cart is empty</p>
         <p className="font-sf-body text-[13px] text-sf-text-muted">Add something delicious and it will show up here.</p>
         <Link
-          href={cart.slug ? `/${cart.slug}` : "/order"}
+          href={cart.slug ? `/${cart.slug}` : "/"}
           className="mt-2 inline-flex items-center gap-2 rounded-xl bg-sf-primary px-5 py-3 font-sf-body text-[14px] font-bold text-sf-on-primary hover:bg-sf-secondary"
         >
           {cart.slug ? "Back to menu" : "Browse restaurants"}
