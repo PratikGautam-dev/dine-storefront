@@ -22,6 +22,9 @@ export type Restaurant = {
   // Multi-branch (migration 0053): empty for every single-branch restaurant (today's behavior,
   // unchanged) -- only a real array once that restaurant has multi-branch on with 2+ locations.
   branches: Branch[];
+  // Photo gallery (migration 0087): ordered URLs, empty until the restaurant uploads any --
+  // the frontend renders no gallery section at all when this is empty.
+  photos: string[];
 };
 
 export type MenuItem = {

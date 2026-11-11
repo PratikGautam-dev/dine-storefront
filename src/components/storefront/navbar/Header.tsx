@@ -15,6 +15,7 @@ import { clearCustomerSession, publicFetch, useCustomerSession } from "@/lib/cus
 import { resetFavoritesCache } from "@/lib/useFavorites";
 import { useCart } from "@/lib/cart";
 import { OutletNoticeBar } from "./OutletNoticeBar";
+import { SearchDropdown, loadRecentSearches, saveRecentSearch } from "./SearchDropdown";
 
 type Props = { onOpenCart: () => void };
 
@@ -25,6 +26,12 @@ export function Header({ onOpenCart }: Props) {
   const [search, setSearch] = useState("");
   const [cities, setCities] = useState<string[]>([]);
   const [cityPickerOpen, setCityPickerOpen] = useState(false);
+  const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+
+  useEffect(() => {
+    setRecentSearches(loadRecentSearches());
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -122,8 +129,21 @@ export function Header({ onOpenCart }: Props) {
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onFocus={() => setSearchDropdownOpen(true)}
+              onBlur={() => {
+                // A short delay so a click on a dropdown item (recent search / suggestion link)
+                // registers before the dropdown unmounts out from under it.
+                setTimeout(() => setSearchDropdownOpen(false), 150);
+              }}
               onKeyDown={(e) => {
-                if (e.key === "Enter") goHomeWith(search ? { search } : {});
+                if (e.key === "Enter" && search.trim()) {
+                  saveRecentSearch(search);
+                  setRecentSearches(loadRecentSearches());
+                  setSearchDropdownOpen(false);
+                  goHomeWith({ search });
+                } else if (e.key === "Escape") {
+                  setSearchDropdownOpen(false);
+                }
               }}
             />
             {search && (
@@ -134,6 +154,24 @@ export function Header({ onOpenCart }: Props) {
               >
                 <span className="material-symbols-outlined text-[16px]">close</span>
               </button>
+            )}
+            {searchDropdownOpen && (
+              <SearchDropdown
+                query={search}
+                recent={recentSearches}
+                onClearRecent={() => {
+                  try {
+                    window.localStorage.removeItem("dc_recent_searches");
+                  } catch {
+                    // best-effort only
+                  }
+                  setRecentSearches([]);
+                }}
+                onNavigate={() => {
+                  if (search.trim()) saveRecentSearch(search);
+                  setSearchDropdownOpen(false);
+                }}
+              />
             )}
           </div>
         </div>

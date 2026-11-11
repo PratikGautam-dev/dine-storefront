@@ -13,6 +13,7 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { publicFetch } from "@/lib/customerAuth";
 import { useCart } from "@/lib/cart";
 import { OutletHeroCanvas } from "@/components/storefront/menu/OutletHeroCanvas";
+import { RestaurantPhotoGallery } from "@/components/storefront/menu/RestaurantPhotoGallery";
 import { MenuSearchFilter, type Chip } from "@/components/storefront/menu/MenuSearchFilter";
 import { MenuGrid } from "@/components/storefront/menu/MenuGrid";
 import { StickyCheckoutBar } from "@/components/storefront/menu/StickyCheckoutBar";
@@ -219,6 +220,8 @@ export default function RestaurantMenuPage() {
         onSlideSelect={setSlide}
         onOrderNow={() => pickCategory(bestsellers.length ? BESTSELLERS : ALL)}
       />
+
+      <RestaurantPhotoGallery photos={restaurant.photos} restaurantName={restaurant.name} />
 
       <MenuSearchFilter
         restaurantName={restaurant.name}
