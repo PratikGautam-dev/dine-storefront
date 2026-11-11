@@ -196,6 +196,7 @@ export default function OrderTrackerPage() {
           open={reviewOpen}
           slug={order.restaurant.slug}
           restaurantName={order.restaurant.name}
+          items={order.items}
           onClose={() => setReviewOpen(false)}
           onSubmitted={() => {
             setReviewOpen(false);

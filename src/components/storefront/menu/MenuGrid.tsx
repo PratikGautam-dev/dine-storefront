@@ -65,6 +65,21 @@ function ComboBadge() {
   );
 }
 
+/** Per-dish star+count badge -- only ever rendered when the item has real ratings (never a
+ * fake "New" or "0" default for an unrated dish). */
+function DishRatingBadge({ rating }: { rating: MenuItem["rating"] }) {
+  if (!rating) return null;
+  return (
+    <span className="inline-flex items-center gap-0.5 font-sf-body text-[11.5px] font-bold text-sf-rating-amber">
+      <span className="material-symbols-outlined text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+        star
+      </span>
+      {rating.average.toFixed(1)}
+      <span className="font-normal text-sf-text-muted">({rating.count})</span>
+    </span>
+  );
+}
+
 type ItemProps = { item: MenuItem; quantity: number; closed: boolean; onAdd: () => void; onSetQuantity: (q: number) => void };
 
 export function BigCard({ item, quantity, closed, onAdd, onSetQuantity }: ItemProps) {
@@ -75,7 +90,10 @@ export function BigCard({ item, quantity, closed, onAdd, onSetQuantity }: ItemPr
         <p className="line-clamp-2 font-sf-body text-[14.5px] font-bold leading-snug text-sf-on-surface">
           {item.name} {item.is_combo && <ComboBadge />}
         </p>
-        <p className="mt-1 font-sf-headline text-[15px] font-extrabold text-sf-on-surface">{rupees(item.price_paise)}</p>
+        <div className="mt-1 flex items-center gap-2">
+          <p className="font-sf-headline text-[15px] font-extrabold text-sf-on-surface">{rupees(item.price_paise)}</p>
+          <DishRatingBadge rating={item.rating} />
+        </div>
         {item.description && <p className="mt-1 line-clamp-2 font-sf-body text-[12px] text-sf-text-muted">{item.description}</p>}
         <div className="mt-auto flex justify-end pt-3">
           <Stepper item={item} quantity={quantity} closed={closed} onAdd={onAdd} onSetQuantity={onSetQuantity} />
@@ -91,6 +109,7 @@ export function Tile({ item, quantity, closed, onAdd, onSetQuantity }: ItemProps
       <Photo item={item} className="h-[92px] w-full" />
       <div className="p-2">
         <p className="truncate font-sf-body text-[13px] font-bold text-sf-on-surface">{item.name}</p>
+        {item.rating && <DishRatingBadge rating={item.rating} />}
         <div className="mt-1 flex items-center justify-between">
           <span className="font-sf-body text-[13px] font-extrabold text-sf-on-surface">{rupees(item.price_paise)}</span>
           <Stepper item={item} quantity={quantity} closed={closed} onAdd={onAdd} onSetQuantity={onSetQuantity} compact />
@@ -108,6 +127,7 @@ export function Row({ item, quantity, closed, onAdd, onSetQuantity }: ItemProps)
         <p className="truncate font-sf-body text-[14.5px] font-bold text-sf-on-surface">
           {item.name} {item.is_combo && <ComboBadge />}
         </p>
+        {item.rating && <DishRatingBadge rating={item.rating} />}
         {item.description && <p className="line-clamp-2 font-sf-body text-[12px] text-sf-text-muted">{item.description}</p>}
         <div className="mt-auto flex items-center justify-between pt-2">
           <span className="font-sf-headline text-[15px] font-extrabold text-sf-on-surface">{rupees(item.price_paise)}</span>

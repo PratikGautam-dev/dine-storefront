@@ -35,6 +35,9 @@ export type MenuItem = {
   is_combo: boolean;
   combo_item_count: number | null;
   is_bestseller: boolean;
+  // Per-dish rating (migration 0087, backend) -- null until the first customer rates this
+  // specific dish. Never a fake default (no "0" or "New" badge) when this is null.
+  rating: { average: number; count: number } | null;
 };
 
 export type Category = { name: string; items: MenuItem[] };

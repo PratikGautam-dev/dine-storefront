@@ -13,15 +13,75 @@ import { toast } from "@/lib/toast";
 
 const MAX_PHOTOS = 5;
 
+// One line item from the completed order this modal was opened for -- enough to let the
+// customer rate the specific dishes they actually received (backend's own POST
+// /api/public/restaurants/{slug}/menu-items/{item_id}/rate gate requires exactly this: a
+// completed order that included this menu item), without a second fetch.
+export type RatableOrderItem = { menu_item_id: string; item_name_snapshot: string };
+
 type Props = {
   open: boolean;
   slug: string;
   restaurantName: string;
   onClose: () => void;
   onSubmitted: () => void;
+  // Optional -- when the caller has the completed order's line items handy (the order tracker
+  // page always does), each one gets its own compact star-picker below the restaurant review so
+  // the customer can rate individual dishes from the same place, in the same visit.
+  items?: RatableOrderItem[];
 };
 
-export function ReviewFormModal({ open, slug, restaurantName, onClose, onSubmitted }: Props) {
+function DishRatingRow({ slug, item }: { slug: string; item: RatableOrderItem }) {
+  const [rating, setRating] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submit(n: number) {
+    setRating(n);
+    setSubmitting(true);
+    setError(null);
+    const result = await publicFetch(`/api/public/restaurants/${slug}/menu-items/${item.menu_item_id}/rate`, {
+      method: "POST",
+      body: JSON.stringify({ rating: n }),
+    });
+    setSubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setDone(true);
+  }
+
+  return (
+    <div className="flex items-center justify-between gap-2 py-1.5">
+      <p className="min-w-0 flex-1 truncate font-sf-body text-[13px] text-sf-on-surface">{item.item_name_snapshot}</p>
+      {done ? (
+        <span className="font-sf-body text-[12px] font-semibold text-sf-veg-green">Rated {rating}★</span>
+      ) : (
+        <div className="flex items-center gap-0.5">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              type="button"
+              disabled={submitting}
+              onClick={() => submit(n)}
+              aria-label={`Rate ${item.item_name_snapshot} ${n} star${n > 1 ? "s" : ""}`}
+              className="text-sf-rating-amber disabled:opacity-50"
+            >
+              <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: n <= rating ? "'FILL' 1" : "'FILL' 0" }}>
+                star
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+      {error && <p className="w-full font-sf-body text-[11px] text-sf-error">{error}</p>}
+    </div>
+  );
+}
+
+export function ReviewFormModal({ open, slug, restaurantName, onClose, onSubmitted, items }: Props) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
@@ -157,6 +217,17 @@ export function ReviewFormModal({ open, slug, restaurantName, onClose, onSubmitt
         </div>
 
         {error && <p className="mt-3 text-sm text-sf-error">{error}</p>}
+
+        {items && items.length > 0 && (
+          <div className="mt-4 border-t border-sf-border-divider pt-3">
+            <p className="font-sf-body text-[12.5px] font-bold text-sf-on-surface">Rate the dishes you had</p>
+            <div className="mt-1 divide-y divide-sf-border-divider">
+              {items.map((item) => (
+                <DishRatingRow key={item.menu_item_id} slug={slug} item={item} />
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="mt-5 flex justify-end gap-2">
           <Button type="button" variant="secondary" onClick={onClose} disabled={submitting}>
