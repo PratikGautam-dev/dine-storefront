@@ -1,13 +1,12 @@
 "use client";
 
-// Ported from dine-client's components/hero/HeroSlider.tsx, then redesigned: the original used a
-// full-bleed stock-photo slideshow with a dark overlay and bottom slide-dots -- visually almost
-// identical to the restaurant detail page's own hero banner (OutletHeroCanvas's heroImage section
-// uses the exact same "dark gradient over a photo + dot indicators" recipe), so the homepage and
-// a restaurant's own page looked like the same screen at a glance. This version uses a single
-// static background image (public/hero/homepage-hero.png, no slideshow/carousel logic) with a
-// dark gradient overlay for text contrast, giving the marketplace homepage its own distinct look.
-// Search box, city picker and trending chips are unchanged real state, still passed down as props.
+// Ported from dine-client's components/hero/HeroSlider.tsx, then redesigned twice: first to a
+// full-bleed background photo (too close to OutletHeroCanvas's own "dark gradient over a photo"
+// recipe, and the photo made the hero read as too dark overall), now a two-column split -- a
+// solid-dark text panel on the left (headline, search, trending chips) and the food photo
+// (public/hero/homepage-hero.png) confined to the right column, blended into the dark panel via
+// a left-edge gradient mask instead of a hard seam. Search box, city picker and trending chips
+// are unchanged real state, still passed down as props.
 type HeroSliderProps = {
   search: string;
   onSearchChange: (value: string) => void;
@@ -33,55 +32,39 @@ export function HeroSlider({
   };
 
   return (
-    <section
-      className="relative w-full overflow-hidden bg-sf-ink text-sf-on-primary py-14 lg:py-20 border-b border-sf-border-divider/60 bg-cover bg-center"
-      style={{ backgroundImage: "url(/hero/homepage-hero.png)" }}
-    >
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/55" />
+    <section className="relative w-full overflow-hidden bg-sf-ink text-sf-on-primary">
+      <div className="pointer-events-none absolute -left-16 -top-16 h-72 w-72 rounded-full bg-sf-primary/30 blur-3xl" />
 
-      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-8 text-center flex flex-col items-center">
-        <div className="inline-flex items-center gap-2 rounded-full bg-sf-surface/10 backdrop-blur-md px-4 py-1.5 mb-5 border border-sf-surface/20 shadow-sm">
-          <span className="flex h-2 w-2 rounded-full bg-sf-veg-green animate-pulse" />
-          <span className="font-sf-body text-xs text-sf-on-primary font-bold tracking-wide uppercase">
-            Direct Restaurant Kitchen Routing
-          </span>
-          <span className="text-sf-on-primary/40 font-bold">•</span>
-          <span className="font-sf-body text-xs text-sf-on-primary font-semibold flex items-center gap-1">
-            <span className="material-symbols-outlined text-[16px] text-sf-primary-container">bolt</span>
-            Fresh, made-to-order favourites
-          </span>
-        </div>
+      <div className="relative mx-auto flex max-w-7xl flex-col lg:flex-row lg:items-stretch">
+        <div className="relative z-10 flex flex-1 flex-col justify-center gap-4 px-4 py-10 sm:px-8 lg:max-w-xl lg:py-16">
+          <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-sf-primary px-3.5 py-1.5 shadow-sm">
+            <span className="material-symbols-outlined text-[15px]">bolt</span>
+            <span className="font-sf-body text-xs font-bold tracking-wide">Food. Faster. Better.</span>
+          </div>
 
-        <h1 className="font-sf-headline text-3xl sm:text-4xl lg:text-5xl text-sf-on-primary tracking-tight font-extrabold leading-[1.15] max-w-3xl">
-          Find your next favourite meal,{" "}
-          <span className="text-sf-primary-container font-black underline decoration-sf-primary-soft decoration-4 underline-offset-4">
-            straight from the kitchen
-          </span>
-          .
-        </h1>
+          <h1 className="font-sf-headline text-3xl sm:text-4xl lg:text-[2.75rem] text-sf-on-primary tracking-tight font-extrabold leading-[1.12]">
+            Find your next favourite meal,{" "}
+            <span className="text-sf-primary-container">straight from the kitchen.</span>
+          </h1>
 
-        <p className="font-sf-body text-base sm:text-lg text-sf-on-primary/90 mt-3 max-w-2xl leading-relaxed text-center font-normal">
-          Daap Dine connects you directly with real restaurant kitchens near you -- no middleman
-          menus, no stale listings.
-        </p>
+          <p className="font-sf-body text-base text-sf-on-primary/80 leading-relaxed max-w-lg">
+            Dine Connect brings the best restaurants near you — no middleman menus, no stale
+            listings.
+          </p>
 
-        <div className="mt-7 w-full max-w-2xl rounded-2xl bg-sf-surface p-2 shadow-2xl border border-sf-surface/20 text-sf-on-surface text-left">
-          <div className="flex flex-col sm:flex-row items-center gap-2">
-            <div className="flex items-center gap-2 shrink-0 rounded-xl bg-sf-surface-container-low px-3.5 py-2.5 text-sf-on-surface w-full sm:w-auto">
-              <span
-                className="material-symbols-outlined text-[18px] text-sf-primary"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                my_location
-              </span>
-              <div className="text-left leading-none">
-                <span className="block font-sf-body text-[11px] text-sf-text-muted font-medium">
-                  City
+          <div className="mt-2 w-full max-w-lg rounded-2xl bg-sf-surface p-2 shadow-2xl border border-sf-surface/20 text-sf-on-surface">
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0 rounded-xl bg-sf-surface-container-low px-3.5 py-2.5 text-sf-on-surface w-full sm:w-auto">
+                <span
+                  className="material-symbols-outlined text-[18px] text-sf-primary"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  my_location
                 </span>
                 <select
                   value={city}
                   onChange={(e) => onCityChange(e.target.value)}
-                  className="font-sf-body text-xs font-bold truncate max-w-[130px] bg-transparent focus:outline-none cursor-pointer"
+                  className="font-sf-body text-xs font-bold truncate max-w-[110px] bg-transparent focus:outline-none cursor-pointer"
                 >
                   <option value="">All cities</option>
                   {cities.map((c) => (
@@ -91,70 +74,56 @@ export function HeroSlider({
                   ))}
                 </select>
               </div>
-            </div>
 
-            <div className="relative flex-1 w-full flex items-center">
-              <span className="material-symbols-outlined absolute left-3 text-[20px] text-sf-text-muted">
-                search
-              </span>
-              <input
-                className="w-full bg-transparent pl-10 pr-3 py-2 font-sf-body text-sm text-sf-on-surface placeholder:text-sf-text-muted focus:outline-none"
-                placeholder="Search restaurants or cuisines..."
-                type="text"
-                value={search}
-                onChange={(e) => onSearchChange(e.target.value)}
-              />
-            </div>
+              <div className="relative flex-1 w-full flex items-center">
+                <span className="material-symbols-outlined absolute left-3 text-[20px] text-sf-text-muted">
+                  search
+                </span>
+                <input
+                  className="w-full bg-transparent pl-10 pr-3 py-2 font-sf-body text-sm text-sf-on-surface placeholder:text-sf-text-muted focus:outline-none"
+                  placeholder="Search restaurants or cuisines..."
+                  type="text"
+                  value={search}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                />
+              </div>
 
-            <button
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-sf-primary hover:bg-sf-secondary text-sf-on-primary font-sf-body text-sm font-bold tracking-wide flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all shrink-0 cursor-pointer"
-              type="button"
-              onClick={handleExplore}
-            >
-              <span>Explore Menu</span>
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </button>
+              <button
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-sf-primary hover:bg-sf-secondary text-sf-on-primary font-sf-body text-sm font-bold tracking-wide flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all shrink-0 cursor-pointer"
+                type="button"
+                onClick={handleExplore}
+              >
+                <span>Explore Menu</span>
+                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-sf-body text-xs text-sf-on-primary/60 font-semibold">Trending:</span>
+            {TRENDING_KEYWORDS.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => onSearchChange(tag)}
+                className="rounded-full bg-sf-surface/10 backdrop-blur-md px-3 py-1 font-sf-body text-xs text-sf-on-primary hover:bg-sf-primary border border-sf-surface/20 transition-all cursor-pointer"
+              >
+                {tag}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-          <span className="font-sf-body text-xs text-sf-on-primary/70 font-semibold">Trending:</span>
-          {TRENDING_KEYWORDS.map((tag) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => onSearchChange(tag)}
-              className="rounded-full bg-sf-surface/10 backdrop-blur-md px-3 py-1 font-sf-body text-xs text-sf-on-primary hover:text-sf-on-primary hover:bg-sf-primary border border-sf-surface/20 transition-all cursor-pointer"
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-7 pt-5 border-t border-sf-surface/10 w-full max-w-xl flex items-center justify-center gap-6 sm:gap-8 text-sf-on-primary/90">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-sf-veg-green text-[22px]">verified</span>
-            <div className="text-left">
-              <span className="block font-sf-body text-sm font-bold text-sf-on-primary">
-                Real Restaurants
-              </span>
-              <span className="font-sf-body text-[12px] text-sf-on-primary/70">
-                Live menus, straight from the kitchen
-              </span>
-            </div>
-          </div>
-          <div className="h-8 w-[1px] bg-sf-surface/20" />
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-sf-primary-container text-[22px]">radar</span>
-            <div className="text-left">
-              <span className="block font-sf-body text-sm font-bold text-sf-on-primary">
-                Local Discovery
-              </span>
-              <span className="font-sf-body text-[12px] text-sf-on-primary/70">
-                Filter by city to find what&apos;s open
-              </span>
-            </div>
-          </div>
+        <div className="relative h-[220px] sm:h-[280px] lg:h-auto lg:flex-1">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero/homepage-hero.png"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          {/* Blends the photo into the left panel's solid dark background instead of a hard seam. */}
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-sf-ink via-sf-ink/15 to-transparent lg:block" />
+          <div className="absolute inset-0 bg-gradient-to-t from-sf-ink/80 via-transparent to-transparent lg:hidden" />
         </div>
       </div>
     </section>
