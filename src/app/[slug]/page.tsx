@@ -156,43 +156,70 @@ export default function RestaurantMenuPage() {
 
   if (needsBranchPick) {
     return (
-      <div className="mx-auto max-w-[520px] px-4 py-10">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-sf-primary text-sf-on-primary">
-            {restaurant.logo_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={restaurant.logo_url} alt="" className="h-full w-full object-cover" />
-            ) : (
-              <span className="material-symbols-outlined">restaurant</span>
-            )}
-          </div>
-          <div className="min-w-0">
-            <p className="truncate font-sf-body text-[16px] font-bold text-sf-on-surface">{restaurant.name}</p>
-            <p className="font-sf-body text-[12.5px] text-sf-text-muted">Choose a location</p>
-          </div>
+      <div className="mx-auto max-w-[560px] pb-10">
+        <div className="relative h-36 w-full overflow-hidden sm:h-44">
+          {restaurant.cover_image_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={restaurant.cover_image_url} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <div className="h-full w-full bg-gradient-to-br from-sf-primary/25 to-sf-primary/5" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          <Link
+            href="/"
+            className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/55"
+            aria-label="Back to home"
+          >
+            <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+          </Link>
         </div>
-        <div className="space-y-2">
-          {restaurant.branches.map((b) => (
-            <button
-              key={b.id}
-              type="button"
-              onClick={() => handleBranchPicked(b)}
-              className="flex w-full items-center gap-3 rounded-2xl border border-sf-border-divider bg-sf-surface p-4 text-left shadow-sm transition-colors hover:border-sf-primary"
-            >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sf-primary-light text-sf-primary">
-                <span className="material-symbols-outlined text-[18px]">location_on</span>
-              </span>
-              <span className="min-w-0">
-                <span className="block font-sf-body text-[14.5px] font-bold text-sf-on-surface">{b.name}</span>
-                {(b.address_line || b.city) && (
-                  <span className="block truncate font-sf-body text-[12.5px] text-sf-text-muted">
-                    {[b.address_line, b.city].filter(Boolean).join(", ")}
-                  </span>
-                )}
-              </span>
-              <span className="material-symbols-outlined ml-auto shrink-0 text-sf-text-muted">arrow_forward</span>
-            </button>
-          ))}
+
+        <div className="-mt-8 px-4">
+          <div className="flex items-end gap-3">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-sf-surface bg-sf-primary text-sf-on-primary shadow-md">
+              {restaurant.logo_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={restaurant.logo_url} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span className="material-symbols-outlined text-[26px]">restaurant</span>
+              )}
+            </div>
+            <div className="min-w-0 pb-1">
+              <p className="truncate font-sf-headline text-[19px] font-extrabold text-sf-on-surface">{restaurant.name}</p>
+              {restaurant.tagline && (
+                <p className="truncate font-sf-body text-[12.5px] text-sf-text-muted">{restaurant.tagline}</p>
+              )}
+            </div>
+          </div>
+
+          <p className="mb-3 mt-5 font-sf-body text-[12px] font-bold uppercase tracking-wide text-sf-text-muted">
+            Choose a location · {restaurant.branches.length} outlets
+          </p>
+          <div className="space-y-2.5">
+            {restaurant.branches.map((b) => (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() => handleBranchPicked(b)}
+                className="group flex w-full items-center gap-3 rounded-2xl border border-sf-border-divider bg-sf-surface p-4 text-left shadow-sm transition-all hover:border-sf-primary hover:shadow-md"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sf-primary/10 text-sf-primary transition-colors group-hover:bg-sf-primary group-hover:text-sf-on-primary">
+                  <span className="material-symbols-outlined text-[18px]">location_on</span>
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-sf-body text-[14.5px] font-bold text-sf-on-surface">{b.name}</span>
+                  {(b.address_line || b.city) && (
+                    <span className="block truncate font-sf-body text-[12.5px] text-sf-text-muted">
+                      {[b.address_line, b.city].filter(Boolean).join(", ")}
+                    </span>
+                  )}
+                </span>
+                <span className="material-symbols-outlined shrink-0 text-sf-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-sf-primary">
+                  arrow_forward
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     );
