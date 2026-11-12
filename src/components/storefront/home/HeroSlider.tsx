@@ -32,12 +32,13 @@ export function HeroSlider({
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-sf-ink text-sf-on-primary">
+    <section className="relative w-full overflow-hidden rounded-b-[2rem] bg-sf-ink text-sf-on-primary sm:rounded-b-[2.5rem]">
       <div className="pointer-events-none absolute -left-16 -top-16 h-72 w-72 rounded-full bg-sf-primary/30 blur-3xl" />
+      <div className="pointer-events-none absolute -right-10 top-1/3 h-56 w-56 rounded-full bg-sf-primary-container/20 blur-3xl" />
 
       <div className="relative mx-auto flex max-w-7xl flex-col lg:flex-row lg:items-stretch">
         <div className="relative z-10 flex flex-1 flex-col justify-center gap-4 px-4 py-10 sm:px-8 lg:max-w-xl lg:py-16">
-          <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-sf-primary px-3.5 py-1.5 shadow-sm">
+          <div className="inline-flex w-fit items-center gap-1.5 rounded-full bg-sf-primary px-3.5 py-1.5 shadow-[0_0_0_4px_rgba(183,18,42,0.15)]">
             <span className="material-symbols-outlined text-[15px]">bolt</span>
             <span className="font-sf-body text-xs font-bold tracking-wide">Food. Faster. Better.</span>
           </div>
@@ -114,16 +115,28 @@ export function HeroSlider({
           </div>
         </div>
 
-        <div className="relative h-[220px] sm:h-[280px] lg:h-auto lg:flex-1">
+        <div className="relative mx-4 mb-6 aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl ring-1 ring-sf-surface/10 sm:mx-8 sm:aspect-[16/9] lg:m-0 lg:aspect-auto lg:h-auto lg:flex-1 lg:rounded-none lg:shadow-none lg:ring-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/hero/homepage-hero.png"
             alt=""
-            className="absolute inset-0 h-full w-full object-cover object-right"
+            className="absolute inset-0 h-full w-full object-cover object-[78%_center] lg:object-right"
           />
           {/* Blends the photo into the left panel's solid dark background instead of a hard seam. */}
           <div className="absolute inset-0 hidden bg-gradient-to-r from-sf-ink via-sf-ink/15 to-transparent lg:block" />
-          <div className="absolute inset-0 bg-gradient-to-t from-sf-ink/80 via-transparent to-transparent lg:hidden" />
+          <div className="absolute inset-0 bg-gradient-to-t from-sf-ink/70 via-transparent to-transparent" />
+
+          <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-sf-surface/15 px-3 py-1.5 backdrop-blur-md border border-sf-surface/20 sm:bottom-4 sm:left-4">
+            <span
+              className="material-symbols-outlined text-[15px] text-sf-rating-amber"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              local_fire_department
+            </span>
+            <span className="font-sf-body text-[11px] font-bold tracking-wide text-sf-on-primary">
+              Made fresh, served hot
+            </span>
+          </div>
         </div>
       </div>
     </section>
