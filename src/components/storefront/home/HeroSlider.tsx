@@ -119,7 +119,7 @@ export function HeroSlider({
           <img
             src="/hero/homepage-hero.png"
             alt=""
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover object-right"
           />
           {/* Blends the photo into the left panel's solid dark background instead of a hard seam. */}
           <div className="absolute inset-0 hidden bg-gradient-to-r from-sf-ink via-sf-ink/15 to-transparent lg:block" />
