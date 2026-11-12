@@ -39,15 +39,24 @@ export default function RestaurantMenuPage() {
   // codebase already hit that exact "needs a <Suspense> boundary to statically prerender" build
   // break once and fixed it this way.
   const [branchParam, setBranchParam] = useState<string | null>(null);
+  // Same window.location.search workaround as branchParam above: an opaque, backend-only
+  // `?preview_token=` that the draft-preview iframe (built in the portal, a separate repo)
+  // appends so a restaurant owner can see unpublished name/tagline/address/logo/cover changes
+  // before going live. Passed through to the fetch below untouched -- never read or validated
+  // here, same as the backend does.
+  const [previewToken, setPreviewToken] = useState<string | null>(null);
   useEffect(() => {
     if (typeof window === "undefined") return;
-    setBranchParam(new URLSearchParams(window.location.search).get("branch"));
+    const urlParams = new URLSearchParams(window.location.search);
+    setBranchParam(urlParams.get("branch"));
+    setPreviewToken(urlParams.get("preview_token"));
   }, []);
   const appliedBranchParam = useRef<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    publicFetch<MenuResponse>(`/api/public/restaurants/${slug}`).then((result) => {
+    const query = previewToken ? `?preview_token=${encodeURIComponent(previewToken)}` : "";
+    publicFetch<MenuResponse>(`/api/public/restaurants/${slug}${query}`).then((result) => {
       if (cancelled) return;
       if (result.ok) setData(result.data);
       else setError(result.error);
@@ -55,7 +64,7 @@ export default function RestaurantMenuPage() {
     return () => {
       cancelled = true;
     };
-  }, [slug]);
+  }, [slug, previewToken]);
 
   // `?branch=<slug-or-id>` from the home page's per-branch outlet cards: pre-select it once data
   // has loaded, same as tapping that branch on the picker screen would, so that screen is
@@ -206,6 +215,11 @@ export default function RestaurantMenuPage() {
 
   return (
     <div className="pb-24">
+      {previewToken && (
+        <div className="sticky top-0 z-50 bg-amber-400 px-4 py-2 text-center font-sf-body text-[12.5px] font-semibold text-amber-950">
+          Previewing unpublished changes
+        </div>
+      )}
       <OutletHeroCanvas
         restaurant={restaurant}
         closed={closed}
