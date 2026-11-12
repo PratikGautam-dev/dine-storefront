@@ -4,10 +4,9 @@
 // full-bleed stock-photo slideshow with a dark overlay and bottom slide-dots -- visually almost
 // identical to the restaurant detail page's own hero banner (OutletHeroCanvas's heroImage section
 // uses the exact same "dark gradient over a photo + dot indicators" recipe), so the homepage and
-// a restaurant's own page looked like the same screen at a glance. This version drops the photo
-// carousel for a distinct brand-gradient + soft-blob treatment (same decorative-blob language
-// OutletHeroCanvas's own background already uses elsewhere, just given its own color identity
-// here) so the marketplace homepage reads as its own place, not a preview of a restaurant page.
+// a restaurant's own page looked like the same screen at a glance. This version uses a single
+// static background image (public/hero/homepage-hero.png, no slideshow/carousel logic) with a
+// dark gradient overlay for text contrast, giving the marketplace homepage its own distinct look.
 // Search box, city picker and trending chips are unchanged real state, still passed down as props.
 type HeroSliderProps = {
   search: string;
@@ -34,16 +33,11 @@ export function HeroSlider({
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-gradient-to-br from-sf-secondary-container via-sf-primary to-sf-ink-wine text-sf-on-primary py-14 lg:py-20 border-b border-sf-border-divider/60">
-      <div className="pointer-events-none absolute -left-20 -top-28 h-[28rem] w-[28rem] rounded-full bg-sf-primary-soft/25 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-sf-primary-container/30 blur-3xl" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.08]"
-        style={{
-          backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
+    <section
+      className="relative w-full overflow-hidden bg-sf-ink text-sf-on-primary py-14 lg:py-20 border-b border-sf-border-divider/60 bg-cover bg-center"
+      style={{ backgroundImage: "url(/hero/homepage-hero.png)" }}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/55" />
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-8 text-center flex flex-col items-center">
         <div className="inline-flex items-center gap-2 rounded-full bg-sf-surface/10 backdrop-blur-md px-4 py-1.5 mb-5 border border-sf-surface/20 shadow-sm">
