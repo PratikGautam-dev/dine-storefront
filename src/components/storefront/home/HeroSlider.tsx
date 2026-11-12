@@ -34,11 +34,11 @@ export function HeroSlider({
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-sf-ink text-sf-on-primary py-14 lg:py-20 border-b border-sf-border-divider/60">
-      <div className="pointer-events-none absolute -left-20 -top-28 h-[28rem] w-[28rem] rounded-full bg-sf-primary/25 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-sf-primary-container/15 blur-3xl" />
+    <section className="relative w-full overflow-hidden bg-gradient-to-br from-sf-secondary-container via-sf-primary to-sf-ink-wine text-sf-on-primary py-14 lg:py-20 border-b border-sf-border-divider/60">
+      <div className="pointer-events-none absolute -left-20 -top-28 h-[28rem] w-[28rem] rounded-full bg-sf-primary-soft/25 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-sf-primary-container/30 blur-3xl" />
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
         style={{
           backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
           backgroundSize: "28px 28px",
