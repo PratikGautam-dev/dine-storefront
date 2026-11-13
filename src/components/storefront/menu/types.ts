@@ -25,6 +25,9 @@ export type Restaurant = {
   // Photo gallery (migration 0087): ordered URLs, empty until the restaurant uploads any --
   // the frontend renders no gallery section at all when this is empty.
   photos: string[];
+  // Page section order/visibility (migration 0091) -- the hero isn't in this list, it's always
+  // first; "menu" is always enabled even if a stale/invalid draft somehow set it false.
+  sections: { key: "gallery" | "menu" | "reviews"; enabled: boolean }[];
 };
 
 export type MenuItem = {

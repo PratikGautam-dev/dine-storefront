@@ -233,6 +233,16 @@ export default function RestaurantMenuPage() {
   const heroSlide = slides.length ? slides[slide % slides.length] : null;
   const heroImage = heroSlide?.image_url || restaurant.cover_image_url;
 
+  // Page section order/visibility (migration 0091) -- defaults to the standard order, all on,
+  // when the backend hasn't set anything (restaurant.sections is always sent, but this is a
+  // defensive fallback). "menu" is always included even if somehow sent disabled -- it's the
+  // one section this page can't function without.
+  const sectionOrder = (
+    restaurant.sections?.length ? restaurant.sections : [{ key: "gallery" as const, enabled: true }, { key: "menu" as const, enabled: true }, { key: "reviews" as const, enabled: true }]
+  )
+    .filter((s) => s.enabled || s.key === "menu")
+    .map((s) => s.key);
+
   const chips: Chip[] = [
     { key: ALL, label: "All", icon: "restaurant_menu" },
     ...(bestsellers.length ? [{ key: BESTSELLERS, label: "Bestsellers", icon: "local_fire_department" }] : []),
@@ -262,39 +272,51 @@ export default function RestaurantMenuPage() {
         onOrderNow={() => pickCategory(bestsellers.length ? BESTSELLERS : ALL)}
       />
 
-      <RestaurantPhotoGallery photos={restaurant.photos} restaurantName={restaurant.name} />
-
-      <MenuSearchFilter
-        restaurantName={restaurant.name}
-        searching={searching}
-        query={query}
-        onQueryChange={setQuery}
-        showChips={!search}
-        chips={chips}
-        activeCat={activeCat}
-        onPickCategory={pickCategory}
-      />
-
-      <div ref={menuRef} className="mx-auto max-w-7xl scroll-mt-4 space-y-6 px-4 py-6 sm:px-8">
-        <MenuGrid
-          search={search}
-          searchResults={searchResults}
-          bestsellers={bestsellers}
-          recommended={recommended}
-          visibleCategories={visibleCategories}
-          activeCat={activeCat}
-          categoriesEmpty={categories.length === 0}
-          quantityFor={quantityFor}
-          closed={closed}
-          onAdd={handleAdd}
-          onSetQuantity={setQuantity}
-          onPickCategory={pickCategory}
-          BESTSELLERS={BESTSELLERS}
-          ALL={ALL}
-        />
-      </div>
-
-      <ReviewsSection slug={slug} />
+      {/* Page section order/visibility (migration 0091) -- the hero above is always first and
+          fixed; gallery/menu/reviews render in whatever order/visibility the restaurant's own
+          settings published (sections, defaulting to gallery/menu/reviews, all on, when unset). */}
+      {sectionOrder.map((key) => {
+        if (key === "gallery") {
+          return (
+            <RestaurantPhotoGallery key="gallery" photos={restaurant.photos} restaurantName={restaurant.name} />
+          );
+        }
+        if (key === "reviews") {
+          return <ReviewsSection key="reviews" slug={slug} />;
+        }
+        return (
+          <div key="menu">
+            <MenuSearchFilter
+              restaurantName={restaurant.name}
+              searching={searching}
+              query={query}
+              onQueryChange={setQuery}
+              showChips={!search}
+              chips={chips}
+              activeCat={activeCat}
+              onPickCategory={pickCategory}
+            />
+            <div ref={menuRef} className="mx-auto max-w-7xl scroll-mt-4 space-y-6 px-4 py-6 sm:px-8">
+              <MenuGrid
+                search={search}
+                searchResults={searchResults}
+                bestsellers={bestsellers}
+                recommended={recommended}
+                visibleCategories={visibleCategories}
+                activeCat={activeCat}
+                categoriesEmpty={categories.length === 0}
+                quantityFor={quantityFor}
+                closed={closed}
+                onAdd={handleAdd}
+                onSetQuantity={setQuantity}
+                onPickCategory={pickCategory}
+                BESTSELLERS={BESTSELLERS}
+                ALL={ALL}
+              />
+            </div>
+          </div>
+        );
+      })}
 
       {cart.slug === slug && <StickyCheckoutBar itemCount={itemCount} subtotalPaise={subtotalPaise} />}
 
