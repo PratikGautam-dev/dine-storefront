@@ -257,6 +257,11 @@ export default function RestaurantMenuPage() {
           Previewing unpublished changes
         </div>
       )}
+      {restaurant.announcement_text && (
+        <div className="bg-sf-primary px-4 py-2 text-center font-sf-body text-[12.5px] font-semibold text-sf-on-primary">
+          {restaurant.announcement_text}
+        </div>
+      )}
       <OutletHeroCanvas
         restaurant={restaurant}
         closed={closed}
