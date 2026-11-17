@@ -16,6 +16,7 @@ import { FulfillmentSection } from "@/components/storefront/checkout/Fulfillment
 import { PaymentSection } from "@/components/storefront/checkout/PaymentSection";
 import { CouponSection } from "@/components/storefront/checkout/CouponSection";
 import { BillSummary } from "@/components/storefront/checkout/BillSummary";
+import { ConsentSection, type ConsentState } from "@/components/storefront/checkout/ConsentSection";
 import type { CouponPreview, FulfillmentType, PaymentMethod } from "@/components/storefront/checkout/types";
 
 export default function CartPage() {
@@ -32,6 +33,9 @@ export default function CartPage() {
   const [avgPrepMinutes, setAvgPrepMinutes] = useState<number | null>(null);
   const [placing, setPlacing] = useState(false);
   const [placeError, setPlaceError] = useState<string | null>(null);
+  // DPDP / Marketing choices for this restaurant: loaded when the customer is signed in, saved when the order is placed
+  const [consent, setConsent] = useState<ConsentState>({ dpdp: null, marketing: null });
+  const [consentOnFile, setConsentOnFile] = useState(false);
 
   useEffect(() => {
     if (!cart.slug) return;
@@ -63,6 +67,22 @@ export default function CartPage() {
     }
   }
 
+  useEffect(() => {
+    if (!cart.slug || !getCustomerToken()) return;
+    publicFetch<{
+      consents: { dpdp: { status: string } | null; marketing: { status: string } | null };
+      answered: boolean;
+    }>(`/api/public/consent?slug=${encodeURIComponent(cart.slug)}`).then((result) => {
+      if (!result.ok) return;
+      const { dpdp, marketing } = result.data.consents;
+      setConsent({
+        dpdp: dpdp ? dpdp.status === "agreed" : null,
+        marketing: marketing ? marketing.status === "agreed" : null,
+      });
+      setConsentOnFile(result.data.answered);
+    });
+  }, [cart.slug]);
+
   const discountPaise = coupon?.discount_paise || 0;
   const totalPaise = Math.max(0, subtotalPaise + deliveryFeePaise - discountPaise);
   const belowMin = minOrderPaise > 0 && subtotalPaise < minOrderPaise;
@@ -77,8 +97,26 @@ export default function CartPage() {
       setPlaceError("A delivery address is required.");
       return;
     }
+    if (consent.dpdp === null || consent.marketing === null) {
+      setPlaceError("Please choose Agree or Disagree for DPDP and Marketing before placing your order.");
+      return;
+    }
+    if (consent.dpdp === false) {
+      setPlaceError("We need you to agree to the DPDP terms to take your order. Marketing stays optional.");
+      return;
+    }
     setPlacing(true);
     setPlaceError(null);
+    const saved = await publicFetch("/api/public/consent", {
+      method: "PUT",
+      body: JSON.stringify({ slug: cart.slug, dpdp: consent.dpdp, marketing: consent.marketing }),
+    });
+    if (!saved.ok) {
+      setPlacing(false);
+      if (saved.status === 401) router.push(`/order/login?next=/order/cart`);
+      else setPlaceError(saved.error);
+      return;
+    }
     const result = await publicFetch<{ order: { id: number; public_id: string }; next: string }>(
       "/api/public/orders",
       {
@@ -160,6 +198,7 @@ export default function CartPage() {
         couponError={couponError}
         coupon={coupon}
       />
+      <ConsentSection restaurantName={cart.restaurantName} value={consent} onChange={setConsent} alreadyOnFile={consentOnFile} />
       <BillSummary
         subtotalPaise={subtotalPaise}
         deliveryFeePaise={fulfillment === "delivery" ? deliveryFeePaise : 0}
