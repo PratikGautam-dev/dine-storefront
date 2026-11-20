@@ -13,6 +13,8 @@ if (process.env.VERCEL && !process.env.NEXT_PUBLIC_API_BASE_URL) {
 }
 
 const nextConfig: NextConfig = {
+  // Tenant subdomains in dev (haldiram.localhost:3001) are cross-origin to `next dev`.
+  allowedDevOrigins: ["*.localhost"],
   // Self-hosted Docker deployment ONLY (frontend/Dockerfile): traces only
   // the files each page actually needs into .next/standalone, so the
   // runtime image doesn't need to ship node_modules at all.
