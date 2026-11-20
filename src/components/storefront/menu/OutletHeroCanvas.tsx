@@ -3,7 +3,6 @@
 // Ported from dine-client's components/menu/OutletHeroCanvas.tsx -- visual layout only (card
 // shell, stats row, hero banner with auto-advancing slides). Every value rendered here is real
 // data/handlers passed down from [slug]/page.tsx: no fake coupons, distance or review counts.
-import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { rupees } from "@/lib/foodOrders";
 import { FavoriteHeartButton } from "@/components/storefront/FavoriteHeartButton";
@@ -62,15 +61,6 @@ export function OutletHeroCanvas({
       <div className="pointer-events-none absolute left-1/3 -bottom-20 h-80 w-80 rounded-full bg-sf-surface-container-high/60 blur-2xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 pt-4 sm:px-8">
-        {/* Breadcrumb */}
-        <nav className="mb-3 flex items-center gap-1.5 font-sf-body text-xs text-sf-text-muted">
-          <Link href="/" className="hover:text-sf-primary transition-colors">
-            Restaurants
-          </Link>
-          <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-          <span className="truncate font-semibold text-sf-on-surface">{restaurant.name}</span>
-        </nav>
-
         {/* Main outlet card */}
         <div className="flex flex-col items-start justify-between gap-6 rounded-2xl border border-sf-border-divider/70 bg-sf-surface p-5 shadow-sm sm:p-6 lg:flex-row lg:items-center">
           <div className="flex min-w-0 flex-1 flex-col items-start gap-4 md:flex-row md:items-center">
