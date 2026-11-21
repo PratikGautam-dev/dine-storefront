@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Header } from "./navbar/Header";
 import { CartDrawer } from "./cart/CartDrawer";
+import { StoreFooter } from "./footer/StoreFooter";
 
 /** Shared shell for every /order page -- renders the ported "Daap Dine" Header (fixed, h-20) and
  * the CartDrawer it opens. /<slug> (a restaurant's menu) draws its own hero/header via
@@ -18,9 +19,10 @@ export function StorefrontShell({ children }: { children: React.ReactNode }) {
     !["cart", "login", "orders", "account", "book-table", "pay"].includes(segments[1]);
 
   return (
-    <div className="min-h-screen bg-sf-bg-page">
+    <div className="flex min-h-screen flex-col bg-sf-bg-page">
       {!isRestaurantPage && <Header onOpenCart={() => setCartOpen(true)} />}
-      <main className={isRestaurantPage ? "" : "pt-20"}>{children}</main>
+      <main className={`flex-1 ${isRestaurantPage ? "" : "pt-20"}`}>{children}</main>
+      <StoreFooter />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </div>
   );
